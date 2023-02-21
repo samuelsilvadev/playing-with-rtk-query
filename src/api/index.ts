@@ -6,9 +6,10 @@ export const pokemonApi = createApi({
   endpoints: (builder) => {
     return {
       pokemonList: builder.query<typeof fakePokemonListing, void>({
-        queryFn() {
+        query: () => {
           return {
-            data: fakePokemonListing,
+            url: "pokemon",
+            method: "GET",
           };
         },
       }),
