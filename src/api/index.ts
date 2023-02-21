@@ -12,10 +12,14 @@ export const pokemonApi = createApi({
           };
         },
       }),
-      pokemonDetails: builder.query<typeof fakePokemonDetailData, void>({
-        queryFn() {
+      pokemonDetails: builder.query<
+        typeof fakePokemonDetailData,
+        { name: string }
+      >({
+        query: ({ name }) => {
           return {
-            data: fakePokemonDetailData,
+            url: "pokemon/" + name,
+            method: "GET",
           };
         },
       }),

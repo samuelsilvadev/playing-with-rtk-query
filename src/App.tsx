@@ -62,7 +62,9 @@ type PokemonDetailsProps = {
 };
 
 function PokemonDetails({ pokemonName }: PokemonDetailsProps) {
-  const { data, isLoading, isError } = usePokemonDetailsQuery();
+  const { data, isLoading, isError } = usePokemonDetailsQuery({
+    name: pokemonName,
+  });
 
   if (isLoading) {
     return <p>Loading...</p>;
