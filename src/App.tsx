@@ -1,6 +1,8 @@
 import React from "react";
-import { fakePokemonDetailData, fakePokemonListing } from "./mocks/data";
 import "./App.css";
+import { pokemonApi } from "./api";
+
+const { usePokemonListQuery, usePokemonDetailsQuery } = pokemonApi;
 
 function App() {
   const [selectedPokemon, selectPokemon] = React.useState<string | undefined>();
@@ -29,13 +31,21 @@ type PokemonListProps = {
 };
 
 function PokemonList({ onPokemonSelected }: PokemonListProps) {
-  const data = fakePokemonListing;
+  const { data, isLoading, isError } = usePokemonListQuery();
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p>Error to load list of pokemons</p>;
+  }
 
   return (
     <article>
       <h2>Overview</h2>
       <ol start={1}>
-        {data.results.map((pokemon) => (
+        {data?.results.map((pokemon) => (
           <li key={pokemon.name}>
             <button onClick={() => onPokemonSelected(pokemon.name)}>
               {pokemon.name}
@@ -52,7 +62,19 @@ type PokemonDetailsProps = {
 };
 
 function PokemonDetails({ pokemonName }: PokemonDetailsProps) {
-  const data = fakePokemonDetailData;
+  const { data, isLoading, isError } = usePokemonDetailsQuery();
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p>Error to load pokemon details</p>;
+  }
+
+  if (!data) {
+    return <p>Pokemon details not found</p>;
+  }
 
   return (
     <article>
