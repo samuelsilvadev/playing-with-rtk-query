@@ -31,9 +31,9 @@ type PokemonListProps = {
 };
 
 function PokemonList({ onPokemonSelected }: PokemonListProps) {
-  const { data, isLoading, isError } = usePokemonListQuery();
+  const { data, isLoading, isError, isUninitialized } = usePokemonListQuery();
 
-  if (isLoading) {
+  if (isUninitialized || isLoading) {
     return <p>Loading...</p>;
   }
 
@@ -45,7 +45,7 @@ function PokemonList({ onPokemonSelected }: PokemonListProps) {
     <article>
       <h2>Overview</h2>
       <ol start={1}>
-        {data?.results.map((pokemon) => (
+        {data.results.map((pokemon) => (
           <li key={pokemon.name}>
             <button onClick={() => onPokemonSelected(pokemon.name)}>
               {pokemon.name}
@@ -62,20 +62,16 @@ type PokemonDetailsProps = {
 };
 
 function PokemonDetails({ pokemonName }: PokemonDetailsProps) {
-  const { data, isLoading, isError } = usePokemonDetailsQuery({
+  const { data, isLoading, isError, isUninitialized } = usePokemonDetailsQuery({
     name: pokemonName,
   });
 
-  if (isLoading) {
+  if (isUninitialized || isLoading) {
     return <p>Loading...</p>;
   }
 
   if (isError) {
     return <p>Error to load pokemon details</p>;
-  }
-
-  if (!data) {
-    return <p>Pokemon details not found</p>;
   }
 
   return (
